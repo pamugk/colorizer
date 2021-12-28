@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/file-image.svg</file>
+        <file>icons/icon.png</file>
+        <file>icons/info-circle.svg</file>
+        <file>icons/palette.svg</file>
+        <file>icons/save.svg</file>
+        <file>icons/times.svg</file>
+        <file>icons/copy.svg</file>
+    </qresource>
+    <qresource prefix="/model">
+        <file>model/pts_in_hull.npy</file>
+    </qresource>
+</RCC>

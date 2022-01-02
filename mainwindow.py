@@ -7,13 +7,13 @@ from sys import exit
 from threading import local, Thread
 
 from PySide6.QtCore import QIODevice, QSaveFile, Slot
-from PySide6.QtGui import QPixmap
+from PySide6.QtGui import QImage, QPixmap
 from PySide6.QtWidgets import \
     QApplication, QFileDialog, QMainWindow, \
     QMessageBox, QProgressBar
 from mainwindow_ui import Ui_MainWindow
 
-from utils import resource_to_bytes_io, numpy_array_to_qt_image
+from utils import resource_to_bytes_io, qt_image_to_numpy_array, numpy_array_to_qt_image
 
 from __feature__ import snake_case, true_property
 
@@ -30,7 +30,6 @@ class MainWindow(QMainWindow):
         self.ui.about_action.triggered.connect(self.about)
 
         self.ui.colorize_button.clicked.connect(self.colorize)
-        self.ui.result_scroll_area.visible = False
 
         self.ui.progressbar = QProgressBar(self)
         self.ui.progressbar.visible = False
@@ -46,7 +45,8 @@ class MainWindow(QMainWindow):
         self.source_image_path = source_path
         if not source_path:
             return
-        self.ui.sourceLabel.pixmap = QPixmap(source_path)
+        self.source_image = QImage(source_path)
+        self.ui.image_label.pixmap = QPixmap.from_image(self.source_image)
         self.ui.open_action.enabled = False
         self.ui.close_action.enabled = True
         self.ui.colorize_button.enabled = True
@@ -62,19 +62,16 @@ class MainWindow(QMainWindow):
         self.ui.save_action.enabled = False
         self.ui.save_as_action.enabled = False
         self.ui.close_action.enabled = False
-        self.ui.source_label.clear()
-        self.ui.result_scroll_area.visible = False
-        self.ui.result_label.clear()
+        self.ui.image_label.clear()
         self.ui.colorize_button.enabled = False
 
-    def save_inner(self, saved_result_file):
-        self.ui.statusbar.show_message('Идёт сохранение изображения...')
-        self.ui.progressbar.visible = True
-        saved_result = QSaveFile(saved_result_file)
+    def save_inner(self):
+        saved_result = QSaveFile(self.saved_result_file)
         if saved_result.open(QIODevice.WriteOnly):
-            self.ui.resultLabel.pixmap.save(saved_result)
+            self.ui.image_label.pixmap.save(saved_result)
             saved_result.commit()
-            self.closeImage()
+            self.saved_result_file = None
+            self.close_image(False)
             msg = 'Изображение успешно сохранено'
         else:
             msg = 'Ошибка при сохранении изображения'
@@ -84,21 +81,28 @@ class MainWindow(QMainWindow):
 
     @Slot()
     def save_image(self, checked):
-        self.save_inner(self.source_image_path)
+        self.saved_result_file = self.source_image_path
+        self.ui.statusbar.show_message('Идёт сохранение изображения...')
+        self.ui.progressbar.visible = True
+        self.background_thread = Thread(None, self.save_inner)
+        self.background_thread.start()
 
     def save_image_as(self, checked):
-        saved_result_file, _ = QFileDialog.get_save_file_name(
+        self.saved_result_file, _ = QFileDialog.get_save_file_name(
             self, 'Сохранить изображение', self.source_image_path,
             'Изображения (*.png *.jpg *.jpeg *.bmp)')
-        if not saved_result_file:
+        if not self.saved_result_file:
             return
-        self.save_inner(saved_result_file)
+        self.ui.statusbar.show_message('Идёт сохранение изображения...')
+        self.ui.progressbar.visible = True
+        self.background_thread = Thread(None, self.save_inner)
+        self.background_thread.start()
 
     def colorize_implementation(self):
         thread_data = local()
         thread_data.success = True
         try:
-            thread_data.image = imread(self.source_image_path)
+            thread_data.image = qt_image_to_numpy_array(self.source_image)
             thread_data.scaled = thread_data.image.astype('float32') / 255.0
             thread_data.lab = cvtColor(thread_data.scaled, COLOR_BGR2LAB)
 
@@ -124,8 +128,7 @@ class MainWindow(QMainWindow):
                 (255 * thread_data.colorized).astype('uint8')
 
             img = numpy_array_to_qt_image(thread_data.colorized)
-            self.ui.result_label.pixmap = QPixmap.from_image(img)
-            self.ui.result_scroll_area.visible = True
+            self.ui.image_label.pixmap = QPixmap.from_image(img)
             self.ui.save_action.enabled = True
             self.ui.save_as_action.enabled = True
         except (Exception, RuntimeError) as e:

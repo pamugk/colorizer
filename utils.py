@@ -1,7 +1,7 @@
 # This Python file uses the following encoding: utf-8
 
 from io import BytesIO
-from numpy import ndarray, uint8
+from numpy import array, ndarray, uint8
 from PySide6.QtCore import QFile, QIODevice
 from PySide6.QtGui import QImage, qRgb
 
@@ -15,6 +15,16 @@ def resource_to_bytes_io(resource: str):
     qfile.close()
     return bytes_stream
 
+
+def qt_image_to_numpy_array(im: QImage):
+    im = im.convert_to_format(QImage.Format.Format_RGB32)
+
+    width = im.width()
+    height = im.height()
+
+    ptr = im.const_bits()
+    arr = array(ptr).reshape(height, width, 4)  #  Copies the data
+    return arr
 
 def numpy_array_to_qt_image(im: ndarray):
     gray_color_table = [qRgb(i, i, i) for i in range(256)]

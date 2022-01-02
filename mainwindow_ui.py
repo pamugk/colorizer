@@ -16,9 +16,9 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QApplication, QGridLayout, QLabel, QMainWindow,
-    QMenu, QMenuBar, QPushButton, QScrollArea,
-    QSizePolicy, QStatusBar, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QLabel, QMainWindow, QMenu,
+    QMenuBar, QPushButton, QScrollArea, QSizePolicy,
+    QStatusBar, QVBoxLayout, QWidget)
 import resources_rc
 
 class Ui_MainWindow(object):
@@ -60,8 +60,31 @@ class Ui_MainWindow(object):
         self.save_action.setIcon(icon5)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.gridLayout = QGridLayout(self.centralwidget)
-        self.gridLayout.setObjectName(u"gridLayout")
+        self.verticalLayout_3 = QVBoxLayout(self.centralwidget)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.image_scroll_area = QScrollArea(self.centralwidget)
+        self.image_scroll_area.setObjectName(u"image_scroll_area")
+        self.image_scroll_area.setWidgetResizable(True)
+        self.image_scroll_area_widget_contents = QWidget()
+        self.image_scroll_area_widget_contents.setObjectName(u"image_scroll_area_widget_contents")
+        self.image_scroll_area_widget_contents.setGeometry(QRect(0, 0, 780, 507))
+        self.verticalLayout = QVBoxLayout(self.image_scroll_area_widget_contents)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.image_label = QLabel(self.image_scroll_area_widget_contents)
+        self.image_label.setObjectName(u"image_label")
+        sizePolicy = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.image_label.sizePolicy().hasHeightForWidth())
+        self.image_label.setSizePolicy(sizePolicy)
+        self.image_label.setScaledContents(True)
+
+        self.verticalLayout.addWidget(self.image_label)
+
+        self.image_scroll_area.setWidget(self.image_scroll_area_widget_contents)
+
+        self.verticalLayout_3.addWidget(self.image_scroll_area)
+
         self.colorize_button = QPushButton(self.centralwidget)
         self.colorize_button.setObjectName(u"colorize_button")
         self.colorize_button.setEnabled(False)
@@ -69,50 +92,7 @@ class Ui_MainWindow(object):
         icon6.addFile(u":/icons/icons/palette.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.colorize_button.setIcon(icon6)
 
-        self.gridLayout.addWidget(self.colorize_button, 1, 0, 1, 2)
-
-        self.source_scroll_area = QScrollArea(self.centralwidget)
-        self.source_scroll_area.setObjectName(u"source_scroll_area")
-        self.source_scroll_area.setWidgetResizable(True)
-        self.source_scroll_area_widget_contents = QWidget()
-        self.source_scroll_area_widget_contents.setObjectName(u"source_scroll_area_widget_contents")
-        self.source_scroll_area_widget_contents.setGeometry(QRect(0, 0, 389, 516))
-        self.verticalLayout = QVBoxLayout(self.source_scroll_area_widget_contents)
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.source_label = QLabel(self.source_scroll_area_widget_contents)
-        self.source_label.setObjectName(u"source_label")
-        sizePolicy = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.source_label.sizePolicy().hasHeightForWidth())
-        self.source_label.setSizePolicy(sizePolicy)
-        self.source_label.setScaledContents(True)
-
-        self.verticalLayout.addWidget(self.source_label)
-
-        self.source_scroll_area.setWidget(self.source_scroll_area_widget_contents)
-
-        self.gridLayout.addWidget(self.source_scroll_area, 0, 0, 1, 1)
-
-        self.result_scroll_area = QScrollArea(self.centralwidget)
-        self.result_scroll_area.setObjectName(u"result_scroll_area")
-        self.result_scroll_area.setWidgetResizable(True)
-        self.result_scroll_area_widget_contents = QWidget()
-        self.result_scroll_area_widget_contents.setObjectName(u"result_scroll_area_widget_contents")
-        self.result_scroll_area_widget_contents.setGeometry(QRect(0, 0, 389, 516))
-        self.verticalLayout_2 = QVBoxLayout(self.result_scroll_area_widget_contents)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.result_label = QLabel(self.result_scroll_area_widget_contents)
-        self.result_label.setObjectName(u"result_label")
-        sizePolicy.setHeightForWidth(self.result_label.sizePolicy().hasHeightForWidth())
-        self.result_label.setSizePolicy(sizePolicy)
-        self.result_label.setScaledContents(False)
-
-        self.verticalLayout_2.addWidget(self.result_label)
-
-        self.result_scroll_area.setWidget(self.result_scroll_area_widget_contents)
-
-        self.gridLayout.addWidget(self.result_scroll_area, 0, 1, 1, 1)
+        self.verticalLayout_3.addWidget(self.colorize_button)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
@@ -162,9 +142,8 @@ class Ui_MainWindow(object):
 #if QT_CONFIG(shortcut)
         self.save_action.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+S", None))
 #endif // QT_CONFIG(shortcut)
+        self.image_label.setText("")
         self.colorize_button.setText(QCoreApplication.translate("MainWindow", u"\u0420\u0430\u0441\u043a\u0440\u0430\u0441\u0438\u0442\u044c", None))
-        self.source_label.setText("")
-        self.result_label.setText("")
         self.file_menu.setTitle(QCoreApplication.translate("MainWindow", u"\u0424\u0430\u0439\u043b", None))
         self.help_menu.setTitle(QCoreApplication.translate("MainWindow", u"\u0421\u043f\u0440\u0430\u0432\u043a\u0430", None))
     # retranslateUi

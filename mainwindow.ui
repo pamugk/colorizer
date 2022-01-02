@@ -18,38 +18,24 @@
     <normaloff>:/icons/icons/icon.png</normaloff>:/icons/icons/icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="0" colspan="2">
-     <widget class="QPushButton" name="colorize_button">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="text">
-       <string>Раскрасить</string>
-      </property>
-      <property name="icon">
-       <iconset resource="resources.qrc">
-        <normaloff>:/icons/icons/palette.svg</normaloff>:/icons/icons/palette.svg</iconset>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0">
-     <widget class="QScrollArea" name="source_scroll_area">
+   <layout class="QVBoxLayout" name="verticalLayout_3">
+    <item>
+     <widget class="QScrollArea" name="image_scroll_area">
       <property name="widgetResizable">
        <bool>true</bool>
       </property>
-      <widget class="QWidget" name="source_scroll_area_widget_contents">
+      <widget class="QWidget" name="image_scroll_area_widget_contents">
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>389</width>
-         <height>516</height>
+         <width>780</width>
+         <height>507</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QLabel" name="source_label">
+         <widget class="QLabel" name="image_label">
           <property name="sizePolicy">
            <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -68,39 +54,18 @@
       </widget>
      </widget>
     </item>
-    <item row="0" column="1">
-     <widget class="QScrollArea" name="result_scroll_area">
-      <property name="widgetResizable">
-       <bool>true</bool>
+    <item>
+     <widget class="QPushButton" name="colorize_button">
+      <property name="enabled">
+       <bool>false</bool>
       </property>
-      <widget class="QWidget" name="result_scroll_area_widget_contents">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>389</width>
-         <height>516</height>
-        </rect>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <widget class="QLabel" name="result_label">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="scaledContents">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
+      <property name="text">
+       <string>Раскрасить</string>
+      </property>
+      <property name="icon">
+       <iconset resource="resources.qrc">
+        <normaloff>:/icons/icons/palette.svg</normaloff>:/icons/icons/palette.svg</iconset>
+      </property>
      </widget>
     </item>
    </layout>
